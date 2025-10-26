@@ -1,98 +1,82 @@
 # Week 2: Send A Multisig Transaction
 
-Challenge: extend your wallet program to spend your own coins. You will create
-two transactions: one that spends from a single-key `p2wpkh` and funds a `p2wsh`
-multisig, and a second transaction that spends from that multisig. You will
-sign and broadcast both transactions to the signet network, and submit your code
-that gnerates both transactions as hex-encoded strings.
+Challenge: extend your wallet program to spend your own coins. You will create two transactions: one that spends from a single-key `p2wpkh` and funds a `p2wsh` multisig, and a second transaction that spends from that multisig.
+You will sign and broadcast both transactions to the signet network, and submit your code
+that generates both transactions as hex-encoded strings.
 
-You may copy-and-paste as much code from last week as needed, or package multiple
-source code files together as long as the program works.
+You may copy-and-paste as much code from last week as needed, or package multiple source code files together as long as the program works.
 
-We will evaluate your code submission against the transactions in the signet chain
-and again, use of the Bitcoin Core wallet is not allowed by your submitted code.
+We will evaluate your code submission against the transactions in the signet chain and again, use of the Bitcoin Core wallet is not allowed by your submitted code.
 
 ## Steps
 
-1. Re-run last week's code to recover wallet state: 2000 key pairs, and all unspent coins
-2. Create a 2-of-2 multisig script from the first two keys (indexes 0 & 1)
-3. Compute the [`p2wsh` witness program](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#user-content-P2WSH) from that script
+1. Re-run last week's code to recover wallet state: 2000 key pairs, and all unspent coins.
+2. Create a 2-of-2 multisig script from the first two keys (indexes 0 & 1).
+3. Compute the [`p2wsh` witness program](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#user-content-P2WSH) from that script.
 4. Construct the first transaction (spend from p2wpkh):
-    1. Choose one of your unspent coins for the input
-    2. Add an output: 0.01 BTC output to your multisig witness program
-    3. Another output: the change (minus fee!) back to your 0th key's public key hash witness program
-    4. Compute the `SIGHASH_ALL` transaction digest for your input as specified in [BIP 143](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#user-content-Specification)
-    5. Sign the digest using the key responsible for the coin you are spending
-    6. Create a transaction witness with the signature and public key
-    7. Serialize the transaction (without witness data!) and compute the txid
-    8. Serialize the final complete transaction
+    1. Choose one of your unspent coins for the input.
+    2. Add an output: 0.01 BTC output to your multisig witness program.
+    3. Another output: the change (minus fee!) back to your 0th key's public key hash witness program.
+    4. Compute the `SIGHASH_ALL` transaction digest for your input as specified in [BIP 143](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#user-content-Specification).
+    5. Sign the digest using the key responsible for the coin you are spending.
+    6. Create a transaction witness with the signature and public key.
+    7. Serialize the transaction (without witness data!) and compute the txid.
+    8. Serialize the final complete transaction.
     9. Return both the txid (required to spend from the p2wsh) and the complete hex-encoded transaction.
 5. Construct the second transaction (spend from p2wsh):
-    1. Repeat the previous steps but spend the `p2wsh` multisig output you created in the last transaction as the input to the new transaction
-    2. Send 0 BTC to an `OP_RETURN` output script which encodes your full name (or nym) in ASCII
+    1. Repeat the previous steps but spend the `p2wsh` multisig output you created in the last transaction as the input to the new transaction.
+    2. Send 0 BTC to an `OP_RETURN` output script which encodes your full name (or nym) in ASCII.
     3. Don't forget the change output and fee! You can reuse your 0th key like before.
     4. Serialize the final transaction and return the hex encoded string.
 
 ## Show off
 
-While not mandatory, you are encouraged to broadcast your transactions to the
-signet network! You can use `bitcoin-cli -signet sendrawtransaction <hex>` for
-this. It will be very cool to see everyone's name in our private signet blockchain!
+While not mandatory, you are encouraged to broadcast your transactions to the signet network!
+You can use `bitcoin-cli -signet sendrawtransaction <hex>` for this.
+It will be very cool to see everyone's name in our private signet blockchain!
 
 ## Submission
 
-This assignment is a continuation of [Recover Balance](./recover_balance.md)
-which you must have completed already to continue. You can push more commits to the same
-repo to pass the second autograder test, which is executed by [solution/run_spend.sh](solution/run_spend.sh).
-So, like last week, if you need to install additional packages for your project
-you can modify that script.
+This assignment is a continuation of [Recover Balance](./recover_balance.md) which you must have completed already to continue.
+You can push more commits to the same repo to pass the second autograder test, which is executed by [solution/run_spend.sh](solution/run_spend.sh).
+So, like last week, if you need to install additional packages for your project you can modify that script.
 
-You code must return exactly TWO lines, each line containing the raw hex string
-for a valid transaction. (see the [example](#example-output) below).
+You code must return exactly TWO lines, each line containing the raw hex string for a valid transaction (see the [example](#example-output) below).
 
-The reviewer will your code in an environment with a signet node that is stuck
-on block 400. We do this so that even if you have already spent your coins and submitted
-your transactions to the signet network, the node will NOT process those
-transactions and they can be evaluated again locally! Both transactions must be
-accepted to the autograder node's mempool to pass.
+The reviewer will your code in an environment with a signet node that is stuck on block 400. We do this so that even if you have already spent your coins and submitted your transactions to the signet network, the node will NOT process those transactions and they can be evaluated again locally!
+Both transactions must be accepted to the autograder node's mempool to pass.
 
-Like last week, the default language is Python and an obfuscated code template
-is yours to play with in [solution/python/spend.py](solution/python/spend.py).
+Like last week, the default language is Python and an obfuscated code template is yours to play with in [solution/python/spend.py](solution/python/spend.py).
 If you choose to write in a different language you MUST edit [solution/run_spend.sh](solution/run_spend.sh).
 
 There is also a Rust template in [solution/rust/spend/src](solution/rust/spend/src).
-If you choose to work in Rust you will need to modify [solution/run_spend.sh](solution/run_spend.sh)
-to execute the Rust code.
+If you choose to work in Rust you will need to modify [solution/run_spend.sh](solution/run_spend.sh) to execute the Rust code.
 
-You **MAY** import an ECDSA library to access constants like `G` or the order
-of the curve, and you **MAY** use an external library for message signing (although
-we encourage you to implement ECDSA signing yourself!). You **MAY NOT** use a
-Bitcoin-specific library to avoid implementing BIP32 or structuring transaction
-objects yourself.
+You **MAY** import an ECDSA library to access constants like `G` or the order of the curve, and you **MAY** use an external library for message signing (although we encourage you to implement ECDSA signing yourself!).
+You **MAY NOT** use a Bitcoin-specific library to avoid implementing BIP32 or structuring transaction objects yourself.
 
 ## Hints
 
-- [BIP 141: Segregated Witness (Consensus layer)](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki)
-- [BIP 143: Transaction Signature Verification for Version 0 Witness Program](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki)
-- [Bitcoin protocol TX serialization](https://en.bitcoin.it/wiki/Protocol_documentation#tx)
-- [Bitcoin script opcodes and their hex representation in raw scripts](https://en.bitcoin.it/wiki/Script)
-- When constructing a multisig script use `OP_2` (not `0x02`) to indicate the number of required signatures and keys
-- Other data like public keys must be pushed to the stack with length bytes (e.g. `0x21` for a 33-byte compressed public key)
-- p2wsh witness programs do not commit to a length byte, just the raw script
-- p2wsh witness programs are a *single* sha-256 hash of the raw script
-- p2wpkh witness programs are the ripemd-160 hash of a sha-256 hash of the raw compressed public key
-- For our purposes, all input sequences are `0xffffffff` and all transaction locktimes are `0x00000000`
-- Since we are only concerned with segregated witness transactions, input `scriptSig` will always be empty (`0x00`, a 0-length script)
-- The `scriptcode` in the transaction commitment must be prefixed with a length byte, but the witness program only commits to the raw script with no length byte
-- The `SIGHASH_ALL` flag is one byte `0x01` when appended to a signature in a witness, but is four bytes little-endian `\x01\x00\x00\x00` in the transaction commitment
+- [BIP 141: Segregated Witness (Consensus layer)](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki).
+- [BIP 143: Transaction Signature Verification for Version 0 Witness Program](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki).
+- [Bitcoin protocol TX serialization](https://en.bitcoin.it/wiki/Protocol_documentation#tx).
+- [Bitcoin script opcodes and their hex representation in raw scripts](https://en.bitcoin.it/wiki/Script).
+- When constructing a multisig script use `OP_2` (not `0x02`) to indicate the number of required signatures and keys.
+- Other data like public keys must be pushed to the stack with length bytes (e.g. `0x21` for a 33-byte compressed public key).
+- p2wsh witness programs do not commit to a length byte, just the raw script.
+- p2wsh witness programs are a *single* sha-256 hash of the raw script.
+- p2wpkh witness programs are the ripemd-160 hash of a sha-256 hash of the raw compressed public key.
+- For our purposes, all input sequences are `0xffffffff` and all transaction locktimes are `0x00000000`.
+- Since we are only concerned with segregated witness transactions, input `scriptSig` will always be empty (`0x00`, a 0-length script).
+- The `scriptcode` in the transaction commitment must be prefixed with a length byte, but the witness program only commits to the raw script with no length byte.
+- The `SIGHASH_ALL` flag is one byte `0x01` when appended to a signature in a witness, but is four bytes little-endian `\x01\x00\x00\x00` in the transaction commitment.
 - Bitcoin signatures:
-    - Must be strict-DER encoded
-    - Must have the SIGHASH_ALL byte (`0x01`) appended
-    - Must have a low s value as defined by [BIP 62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#user-content-Low_S_values_in_signatures)
-- Remember to add a `0x00` byte as the first witness stack element for the [CHECKMULTISIG bug](https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki)
+    - Must be strict-DER encoded.
+    - Must have the SIGHASH_ALL byte (`0x01`) appended.
+    - Must have a low s value as defined by [BIP 62](https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#user-content-Low_S_values_in_signatures).
+- Remember to add a `0x00` byte as the first witness stack element for the [CHECKMULTISIG bug](https://github.com/bitcoin/bips/blob/master/bip-0147.mediawiki).
 
-See the obfuscated [example solution](example_solution/spend.py) which may be used as a template
-for your project in Python, or as an example architecture for whatever language you choose.
+See the obfuscated [example solution](example_solution/spend.py) which may be used as a template for your project in Python, or as an example architecture for whatever language you choose.
 
 
 ## Example output
@@ -216,5 +200,4 @@ $ bitcoin-cli decoderawtransaction 020000000001015a2cc5b8b3023089035104bfb117cb7
   "vsize": 162,
   "weight": 648
 }
-
 ```

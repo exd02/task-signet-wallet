@@ -1,9 +1,7 @@
 # Signet Wallet Project
 
-The goal of this project is to write a simple wallet over two weeks and use it
+The goal of this project is to write a simple wallet over four weeks and use it
 to interact with a custom signet network provided by the administrator.
-
-## Simplify
 
 To reduce the scope of this project the wallet will be very limited:
 - No separate change addresses: one descriptor is used for all internal and external addressees.
@@ -14,7 +12,7 @@ byte to indicate length.
     - Except one [`p2wsh`](https://en.bitcoin.it/wiki/BIP_0141#P2WSH) multisig which is the goal of the second assignment
 - Fees can be hard-coded by value, no estimation is necessary.
 - Transactions you create will always have exactly 1 input and 2 outputs.
-- Don't worry about invalid keys (probabilty is less than 1 in 2<sup>127</sup>)
+- Don't worry about invalid keys (probability is less than 1 in 2<sup>127</sup>)
 - Other constants:
     - All transactions will be version 2 (little-endian encoded as `\x02\x00\x00\x00`)
     - All input sequences will be `0xffffffff`
@@ -37,20 +35,20 @@ The important elements here are the extended private key (`tprv...`) and the
 derivation path (`84h/1h/0h/0/*`).
 
 *Note:* If you have already connected to the "default" (or any other) signet network
-with your node, you may need to rename / move your existing data directory. See
-[#27494](https://github.com/bitcoin/bitcoin/issues/27494)
+with your node, you may need to rename / move your existing data directory.
+See [#27494](https://github.com/bitcoin/bitcoin/issues/27494)
 
 A `bitcoin.conf` file will be provided to students in [config/bitcoin.conf](config/bitcoin.conf)
-which will set the address of the mining node as well as provide the signet
-[challenge](https://en.bitcoin.it/wiki/Signet). Copy this file to your system's
-[default datadir location](https://github.com/bitcoin/bitcoin/blob/master/doc/bitcoin-conf.md#configuration-file-path)
-and start Bitcoin Core:
+which will provide the signet [challenge](https://en.bitcoin.it/wiki/Signet).
+Adjust the IP of the mining node as received by email and copy this file to your system's [default datadir location](https://github.com/bitcoin/bitcoin/blob/master/doc/bitcoin-conf.md#configuration-file-path) and start Bitcoin Core:
 
 `bitcoind -signet`
 
 You should also then be able to execute RPCs with (for example):
 
 `bitcoin-cli -signet getblockcount`
+
+You should receive at least 300 blocks (more as time goes by).
 
 # Task 1 (keys and addresses)
 
