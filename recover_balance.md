@@ -24,8 +24,7 @@ You are, of course, allowed to import your descriptor into Bitcoin Core to check
 ## Submission
 
 Each student will get a private fork of this repository when they accept the GitHub Classroom assignment.
-There's an autograder for this task to help us identify the students that finished, but we will manually review your submission.
-We will look for code quality and organization of your commit history (don't freak out, better finish and wait for review than freeze for perfectionism).
+There's an autograder for this task to help us identify the students that finished, but we will manually review your submission for code quality and organization of your commit history (don't freak out, better finish and wait for review than freeze for perfectionism).
 
 Your code will be executed in an environment with a synced signet full node, so any `bitcoin-cli -signet ...` commands executed in the shell should work just like they do for you locally.
 
