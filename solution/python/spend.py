@@ -10,11 +10,11 @@ from balance import (
 
 
 # Given 2 compressed public keys as byte arrays, construct
-# a 2-of-2 multisig output script. No length byte prefix is necessary.
+# a 2-of-2 multisig witness script. No length byte prefix is necessary.
 def create_multisig_script(keys: List[bytes]) -> bytes:
 
 
-# Given an output script as a byte array, compute the p2wsh witness program
+# Given an witness script as a byte array, compute the p2wsh witness program
 # This is a segwit version 0 pay-to-script-hash witness program.
 # https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#p2wsh
 def get_p2wsh_program(script: bytes, version: int=0) -> bytes:

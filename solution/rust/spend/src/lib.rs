@@ -19,12 +19,12 @@ pub struct Outpoint {
 }
 
 // Given 2 compressed public keys as byte arrays, construct
-// a 2-of-2 multisig output script. No length byte prefix is necessary.
+// a 2-of-2 multisig witness script. No length byte prefix is necessary.
 fn create_multisig_script(keys: Vec<Vec<u8>>) -> Vec<u8> {
     unimplemented!("implement the logic")
 }
 
-// Given an output script as a byte array, compute the p2wsh witness program
+// Given an witness script as a byte array, compute the p2wsh witness program
 // This is a segwit version 0 pay-to-script-hash witness program.
 // https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#p2wsh
 fn get_p2wsh_program(script: &[u8], version: Option<u32>) -> Vec<u8> {
